@@ -12,6 +12,7 @@ public class Window extends JFrame {
 	
 	final Dimension WINDOW_SIZE = new Dimension(600,600);
 	final int SIZE = 12;
+	final int LIVE_CELLS = 4;
 	
 	JPanel game = new JPanel();
 	
@@ -33,4 +34,9 @@ public class Window extends JFrame {
 			game.add(buttons[i]);
 		}
 	}
+		
+	private void genLiveCells() {
+		
+	}
+	
 }
