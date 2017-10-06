@@ -19,8 +19,7 @@ public class Window extends JFrame implements MouseListener {
 	final static int LIVE_CELLS = 48;
 	
 	static List<Integer> liveCellLocations = new ArrayList<Integer>();
-	static List<Integer> killList = new ArrayList<Integer>();
-	static List<Integer> birthList = new ArrayList<Integer>();
+	static List<Integer> alternateList = new ArrayList<Integer>();
 
 	
 	JPanel game = new JPanel();
@@ -42,6 +41,10 @@ public class Window extends JFrame implements MouseListener {
 		for (int i = 0; i < buttons.length; i++) {
 			buttons[i] = new JButton();
 			game.add(buttons[i]);
+		}
+		int i = 0;
+		while (i < 5) {
+			i ++;
 		}
 	}
 	
@@ -91,6 +94,13 @@ public class Window extends JFrame implements MouseListener {
 		
 		return totalCellCount;
 	}
+	
+	public static void updateCells() {
+		liveCellLocations.clear();
+		for (int i = 0; i < alternateList.size(); i++) {
+			liveCellLocations.add(alternateList.get(i));
+		}
+	}
 
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
@@ -114,21 +124,22 @@ public class Window extends JFrame implements MouseListener {
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		for (int j = 0; j < (SIZE*SIZE); j++)
-		{
-			@SuppressWarnings("unused")
+		for (int j = 0; j < (SIZE*SIZE); j++) {
 			int cellNumber = getLiveCellNumber(j);
 			
 			for (int i = 0; i < liveCellLocations.size(); i++) {
 				if (j == liveCellLocations.get(i)) {
-					if (cellNumber < 2 || cellNumber > 3)
-						killList.add(j);				
+					if (cellNumber < 2 || cellNumber > 3) {
+						
+					} else {
+						alternateList.add(j);
+					}
 				} else {
 					if (cellNumber == 3)
-						birthList.add(j);
+						alternateList.add(j);
 				}
 			}
 		}
+		updateCells();
 	}
-
 }
