@@ -19,6 +19,9 @@ public class Window extends JFrame implements MouseListener {
 	final static int LIVE_CELLS = 48;
 	
 	static List<Integer> liveCellLocations = new ArrayList<Integer>();
+	static List<Integer> killList = new ArrayList<Integer>();
+	static List<Integer> birthList = new ArrayList<Integer>();
+
 	
 	JPanel game = new JPanel();
 	
@@ -118,9 +121,11 @@ public class Window extends JFrame implements MouseListener {
 			
 			for (int i = 0; i < liveCellLocations.size(); i++) {
 				if (j == liveCellLocations.get(i)) {
-				//if cell is a live do accoding rules
+					if (cellNumber < 2 || cellNumber > 3)
+						killList.add(j);				
 				} else {
-				//else do if cell is dead accodring to rules
+					if (cellNumber == 3)
+						birthList.add(j);
 				}
 			}
 		}
