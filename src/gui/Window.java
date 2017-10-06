@@ -2,6 +2,8 @@ package gui;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-public class Window extends JFrame {
+public class Window extends JFrame implements MouseListener {
 	private static final long serialVersionUID = 7446192599263749847L;
 	
 	final Dimension WINDOW_SIZE = new Dimension(600,600);
@@ -29,6 +31,7 @@ public class Window extends JFrame {
 		game.setLayout(new GridLayout(SIZE, SIZE));
 		genButs();
 		add(game);
+		addMouseListener(this);
 		setVisible(true);
 	}
 	
@@ -84,6 +87,43 @@ public class Window extends JFrame {
 		}
 		
 		return totalCellCount;
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent arg0) {
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		for (int j = 0; j < (SIZE*SIZE); j++)
+		{
+			@SuppressWarnings("unused")
+			int cellNumber = getLiveCellNumber(j);
+			
+			for (int i = 0; i < liveCellLocations.size(); i++) {
+				if (j == liveCellLocations.get(i)) {
+				//if cell is a live do accoding rules
+				} else {
+				//else do if cell is dead accodring to rules
+				}
+			}
+		}
 	}
 
 }
