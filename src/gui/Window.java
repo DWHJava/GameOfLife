@@ -25,7 +25,7 @@ public class Window extends JFrame implements MouseListener {
 	
 	JPanel game = new JPanel();
 	
-	JButton[] buttons = new JButton[SIZE * SIZE];
+	static JButton[] buttons = new JButton[SIZE * SIZE];
 	
 	public Window() {
 		super("Game of Life");
@@ -109,8 +109,14 @@ public class Window extends JFrame implements MouseListener {
 	
 	public static void updateCells() {
 		liveCellLocations.clear();
+		
+		for (int i = 0; i < (SIZE*SIZE); i++) {
+			buttons[i].setBackground(Color.WHITE);
+		}
+		
 		for (int i = 0; i < alternateList.size(); i++) {
 			liveCellLocations.add(alternateList.get(i));
+			buttons[liveCellLocations.get(i)].setBackground(Color.BLUE);
 		}
 	}
 
