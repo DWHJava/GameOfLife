@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
@@ -35,8 +36,19 @@ public class Window extends JFrame implements MouseListener {
 		add(game);
 		addMouseListener(this);
 		setVisible(true);
+		setLiveCells();
 	}
 	
+	private void setLiveCells()
+	{
+		for (int i = 0; i < LIVE_CELLS; i++)
+		{
+			liveCellLocations.add(getUniqueRand());
+			buttons[liveCellLocations.get(i)].setBackground(Color.BLUE);
+		}
+
+	}
+
 	private void genButs() {
 		for (int i = 0; i < buttons.length; i++) {
 			buttons[i] = new JButton();
