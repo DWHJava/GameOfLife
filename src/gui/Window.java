@@ -13,7 +13,7 @@ public class Window extends JFrame {
 	private static final long serialVersionUID = 7446192599263749847L;
 	
 	final Dimension WINDOW_SIZE = new Dimension(600,600);
-	final int SIZE = 12;
+	final static int SIZE = 12;
 	final int LIVE_CELLS = 4;
 	
 	static List<Integer> liveCellLocations = new ArrayList<Integer>();
