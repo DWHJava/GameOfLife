@@ -14,7 +14,7 @@ public class Window extends JFrame {
 	
 	final Dimension WINDOW_SIZE = new Dimension(600,600);
 	final static int SIZE = 12;
-	final int LIVE_CELLS = 4;
+	final static int LIVE_CELLS = 48;
 	
 	static List<Integer> liveCellLocations = new ArrayList<Integer>();
 	
@@ -52,8 +52,38 @@ public class Window extends JFrame {
 		return randomNumber;
 	}
 	
-	private void genLiveCells() {
+	public static int getLiveCellNumber(int position) 
+	{
+		int totalCellCount = 0;
+
+		int row = position % SIZE;
+		int column = position / SIZE;
+
+		for (int i = 0; i < LIVE_CELLS; i++)
+		{
+			int cellPosition = liveCellLocations.get(i);
+			int cellRow = cellPosition % SIZE;
+			int cellColumn = cellPosition / SIZE;
+
+			if (cellRow == row + 1 && cellColumn == column)
+				totalCellCount++;
+			if (cellRow == row - 1 && cellColumn == column)
+				totalCellCount++;
+			if (cellColumn == column + 1 && cellRow == row)
+				totalCellCount++;
+			if (cellColumn == column - 1 && cellRow == row)
+				totalCellCount++;
+			if (cellRow == row + 1 && cellColumn == column + 1)
+				totalCellCount++;
+			if (cellRow == row + 1 && cellColumn == column - 1)
+				totalCellCount++;
+			if (cellRow == row - 1 && cellColumn == column + 1)
+				totalCellCount++;
+			if (cellRow == row - 1 && cellColumn == column - 1)
+				totalCellCount++;
+		}
 		
+		return totalCellCount;
 	}
-	
+
 }
