@@ -1,10 +1,11 @@
 package gui;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-public class Window extends JFrame implements MouseListener {
+public class Window extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 7446192599263749847L;
 	
 	final Dimension WINDOW_SIZE = new Dimension(600,600);
@@ -24,6 +25,8 @@ public class Window extends JFrame implements MouseListener {
 
 	
 	JPanel game = new JPanel();
+	JPanel nextPanel = new JPanel();
+	JButton next = new JButton("Next");
 	
 	static JButton[] buttons = new JButton[SIZE * SIZE];
 	
@@ -31,10 +34,13 @@ public class Window extends JFrame implements MouseListener {
 		super("Game of Life");
 		setSize(WINDOW_SIZE);
 		setResizable(false);
+		setLayout(new BorderLayout());
 		game.setLayout(new GridLayout(SIZE, SIZE));
 		genButs();
-		add(game);
-		addMouseListener(this);
+		next.addActionListener(this);
+		nextPanel.add(next);
+		add(game, BorderLayout.CENTER);
+		add(nextPanel, BorderLayout.SOUTH);
 		setVisible(true);
 		setLiveCells();
 	}
@@ -108,6 +114,8 @@ public class Window extends JFrame implements MouseListener {
 	}
 	
 	public static void updateCells() {
+		System.out.println(liveCellLocations.size());
+		System.out.println(alternateList.size());
 		liveCellLocations.clear();
 		
 		for (int i = 0; i < (SIZE*SIZE); i++) {
@@ -116,48 +124,37 @@ public class Window extends JFrame implements MouseListener {
 		
 		for (int i = 0; i < alternateList.size(); i++) {
 			liveCellLocations.add(alternateList.get(i));
-			buttons[liveCellLocations.get(i)].setBackground(Color.BLUE);
 		}
-	}
-
-	@Override
-	public void mouseClicked(MouseEvent arg0) {
 		
+		
+		
+		for (int i = 0; i < alternateList.size(); i++) {
+			buttons[alternateList.get(i)].setBackground(Color.BLUE);
+		}
+		
+		alternateList.clear();
 	}
-
+	
 	@Override
-	public void mouseEntered(MouseEvent e) {
-
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		for (int j = 0; j < (SIZE*SIZE); j++) {
-			int cellNumber = getLiveCellNumber(j);
-			
-			for (int i = 0; i < liveCellLocations.size(); i++) {
-				if (j == liveCellLocations.get(i)) {
-					if (cellNumber < 2 || cellNumber > 3) {
-						
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == next) {
+			for (int j = 0; j < (SIZE*SIZE); j++) {
+				int cellNumber = getLiveCellNumber(j);
+				
+				for (int i = 0; i < liveCellLocations.size(); i++) {
+					if (j == liveCellLocations.get(i)) {
+						if (cellNumber < 2 || cellNumber > 3) {
+							
+						} else {
+							alternateList.add(j);
+						}
 					} else {
-						alternateList.add(j);
+						if (cellNumber == 3)
+							alternateList.add(j);
 					}
-				} else {
-					if (cellNumber == 3)
-						alternateList.add(j);
 				}
 			}
+			updateCells();
 		}
-		updateCells();
 	}
 }
