@@ -117,7 +117,8 @@ public class Window extends JFrame implements ActionListener {
 	}
 	
 	public static void updateCells() {
-
+		
+		//iterate through 
 		for (int i = 0; i < cellsToDie.size(); i++) {
 			buttons[cellsToDie.get(i)].setBackground(Color.WHITE);
 			for (int j = 0; j < liveCellLocations.size(); j++){
@@ -142,22 +143,23 @@ public class Window extends JFrame implements ActionListener {
 				int cellNumber = getLiveCellNumber(j);
 				
 				for (int i = 0; i < liveCellLocations.size(); i++) {
+					//is cell location alive
 					if (j == liveCellLocations.get(i)) {
 						if (cellNumber < 2 || cellNumber > 3) {
 							//cell to die
 							cellsToDie.add(j);
-						} else {
-							//don't change cell
 						}
 					} else {
 						if (cellNumber == 3)
-							//cell birth
+							//cell to birth
 							cellsToBirth.add(j);
 					}
 				}
 			}
+			//debug
 			System.out.println(alternateList.size());
 
+			//change cell locations according to lists
 			updateCells();
 		}
 	}
