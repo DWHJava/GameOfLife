@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -29,8 +30,11 @@ public class Window extends JFrame implements ActionListener
 
 	
 	JPanel game = new JPanel();
-	JPanel nextPanel = new JPanel();
+	JPanel optionPanel = new JPanel();
 	JButton next = new JButton("Next");
+	JButton autoRun = new JButton("Auto Run");
+
+	private boolean isRunning;
 	
 	static JButton[] buttons = new JButton[SIZE * SIZE];
 	
@@ -43,9 +47,11 @@ public class Window extends JFrame implements ActionListener
 		game.setLayout(new GridLayout(SIZE, SIZE));
 		generateButtons();
 		next.addActionListener(this);
-		nextPanel.add(next);
+		autoRun.addActionListener(this);
+		optionPanel.add(next);
+		optionPanel.add(autoRun);
 		add(game, BorderLayout.CENTER);
-		add(nextPanel, BorderLayout.SOUTH);
+		add(optionPanel, BorderLayout.SOUTH);
 		setVisible(true);
 		setLiveCells();
 	}
@@ -123,7 +129,8 @@ public class Window extends JFrame implements ActionListener
 	}
 	
 	//Updates cells after iteration
-	public static void updateCells() {
+	public static void updateCells() 
+	{
 		//Kill Cells
 		for (int i = 0; i < cellsToDie.size(); i++) 
 		{
@@ -146,46 +153,61 @@ public class Window extends JFrame implements ActionListener
 		cellsToDie.clear();
 	}
 	
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		
-		//Life iteration
-		if (e.getSource() == next) 
+	private static void doLifeIteration() 
+	{
+		//Check every cell
+		for (int j = 0; j < (SIZE*SIZE); j++) 
 		{
-			//Check every cell
-			for (int j = 0; j < (SIZE*SIZE); j++) 
+			int cellNumber = getLiveCellNumber(j);
+			
+			//check if cell is a live
+			if (liveCellLocations.contains(j)) 
 			{
-				int cellNumber = getLiveCellNumber(j);
-				
-				//check if cell is a live
-				if (liveCellLocations.contains(j)) 
+				//check if cell will die
+				if (cellNumber < 2 || cellNumber > 3) 
 				{
-					//check if cell will die
-					if (cellNumber < 2 || cellNumber > 3) 
+					//cell to die
+					if (!cellsToDie.contains(j)) 
 					{
-						//cell to die
-						if (!cellsToDie.contains(j)) 
-						{
-							cellsToDie.add(j);
-						}
+						cellsToDie.add(j);
 					}
-				} 
-				//else cell is dead
-				else 
+				}
+			} 
+			//else cell is dead
+			else 
+			{
+				//check if cell will birth
+				if (cellNumber == 3)
 				{
-					//check if cell will birth
-					if (cellNumber == 3)
+					//cell to birth
+					if (!cellsToBirth.contains(j)) 
 					{
-						//cell to birth
-						if (!cellsToBirth.contains(j)) 
-						{
-							cellsToBirth.add(j);
-						}
+						cellsToBirth.add(j);
 					}
 				}
 			}
-		}
-			//change cell locations according to lists
+			
+			//update visuals
 			updateCells();
+		}
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent source) {
+		
+		//Check if next button is pressed
+		if (source.getSource() == next) 
+		{
+			doLifeIteration(); 
+		}
+		
+		if (source.getSource() == autoRun) 
+		{
+			next.setEnabled(false);
+			autoRun.setEnabled(false);
+			
+			// TODO implement auto run feature
+		}
+
 	}
 }
