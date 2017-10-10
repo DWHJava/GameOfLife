@@ -89,7 +89,7 @@ public class Window extends JFrame implements ActionListener {
 		int row = position % SIZE;
 		int column = position / SIZE;
 
-		for (int i = 0; i < LIVE_CELLS; i++)
+		for (int i = 0; i < liveCellLocations.size(); i++)
 		{
 			int cellPosition = liveCellLocations.get(i);
 			int cellRow = cellPosition % SIZE;
