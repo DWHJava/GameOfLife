@@ -22,9 +22,6 @@ public class Window extends JFrame implements ActionListener {
 	
 	static List<Integer> liveCellLocations = new ArrayList<Integer>();
 	static List<Integer> alternateList = new ArrayList<Integer>();
-	
-	static List<Integer> cellsToDie = new ArrayList<Integer>();
-	static List<Integer> cellsToBirth = new ArrayList<Integer>();
 
 	
 	JPanel game = new JPanel();
@@ -117,23 +114,25 @@ public class Window extends JFrame implements ActionListener {
 	}
 	
 	public static void updateCells() {
+		System.out.println(liveCellLocations.size());
+		System.out.println(alternateList.size());
+		liveCellLocations.clear();
 		
-		//iterate through 
-		for (int i = 0; i < cellsToDie.size(); i++) {
-			buttons[cellsToDie.get(i)].setBackground(Color.WHITE);
-			for (int j = 0; j < liveCellLocations.size(); j++){
-				if (cellsToDie.get(i) == liveCellLocations.get(j))
-					liveCellLocations.remove(j);
-			}
-
-		}
-		for (int i = 0; i < cellsToBirth.size(); i++) {
-			buttons[cellsToBirth.get(i)].setBackground(Color.BLUE);
-			liveCellLocations.add(cellsToBirth.get(i));
+		for (int i = 0; i < (SIZE*SIZE); i++) {
+			buttons[i].setBackground(Color.WHITE);
 		}
 		
-		cellsToBirth.clear();
-		cellsToDie.clear();
+		for (int i = 0; i < alternateList.size(); i++) {
+			liveCellLocations.add(alternateList.get(i));
+		}
+		
+		
+		
+		for (int i = 0; i < alternateList.size(); i++) {
+			buttons[alternateList.get(i)].setBackground(Color.BLUE);
+		}
+		
+		alternateList.clear();
 	}
 	
 	@Override
@@ -143,23 +142,18 @@ public class Window extends JFrame implements ActionListener {
 				int cellNumber = getLiveCellNumber(j);
 				
 				for (int i = 0; i < liveCellLocations.size(); i++) {
-					//is cell location alive
 					if (j == liveCellLocations.get(i)) {
 						if (cellNumber < 2 || cellNumber > 3) {
-							//cell to die
-							cellsToDie.add(j);
+							
+						} else {
+							alternateList.add(j);
 						}
 					} else {
 						if (cellNumber == 3)
-							//cell to birth
-							cellsToBirth.add(j);
+							alternateList.add(j);
 					}
 				}
 			}
-			//debug
-			System.out.println(alternateList.size());
-
-			//change cell locations according to lists
 			updateCells();
 		}
 	}
