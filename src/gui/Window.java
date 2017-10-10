@@ -13,7 +13,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-public class Window extends JFrame implements ActionListener {
+public class Window extends JFrame implements ActionListener 
+{
 	private static final long serialVersionUID = 7446192599263749847L;
 	
 	final Dimension WINDOW_SIZE = new Dimension(600,600);
@@ -33,13 +34,14 @@ public class Window extends JFrame implements ActionListener {
 	
 	static JButton[] buttons = new JButton[SIZE * SIZE];
 	
-	public Window() {
+	public Window() 
+	{
 		super("Game of Life");
 		setSize(WINDOW_SIZE);
 		setResizable(false);
 		setLayout(new BorderLayout());
 		game.setLayout(new GridLayout(SIZE, SIZE));
-		genButs();
+		generateButtons();
 		next.addActionListener(this);
 		nextPanel.add(next);
 		add(game, BorderLayout.CENTER);
@@ -48,6 +50,18 @@ public class Window extends JFrame implements ActionListener {
 		setLiveCells();
 	}
 	
+	//Generate buttons
+	private void generateButtons() 
+	{
+		for (int i = 0; i < buttons.length; i++) 
+		{
+			buttons[i] = new JButton();
+			game.add(buttons[i]);
+			buttons[i].setBackground(Color.WHITE);
+		}
+	}
+	
+	//Preset live cells
 	private void setLiveCells()
 	{
 		for (int i = 0; i < LIVE_CELLS; i++)
@@ -57,18 +71,8 @@ public class Window extends JFrame implements ActionListener {
 		}
 
 	}
-
-	private void genButs() {
-		for (int i = 0; i < buttons.length; i++) {
-			buttons[i] = new JButton();
-			game.add(buttons[i]);
-		}
-		int i = 0;
-		while (i < 5) {
-			i ++;
-		}
-	}
 	
+	//Method to create unique random numbers
 	public static int getUniqueRand()
 	{
 		int randomNumber = 1 + (int) (Math.random() * ((SIZE * SIZE) - 1));
@@ -82,6 +86,7 @@ public class Window extends JFrame implements ActionListener {
 		return randomNumber;
 	}
 	
+	//Calculates how many live cells around cell
 	public static int getLiveCellNumber(int position) 
 	{
 		int totalCellCount = 0;
@@ -116,6 +121,7 @@ public class Window extends JFrame implements ActionListener {
 		return totalCellCount;
 	}
 	
+	//Updates cells after iteration
 	public static void updateCells() {
 		//iterate through 
 		for (int i = 0; i < buttons.length; i++) {
@@ -140,30 +146,44 @@ public class Window extends JFrame implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == next) {
-			for (int j = 0; j < (SIZE*SIZE); j++) {
+		
+		//Life iteration
+		if (e.getSource() == next) 
+		{
+			//Check every cell
+			for (int j = 0; j < (SIZE*SIZE); j++) 
+			{
 				int cellNumber = getLiveCellNumber(j);
 				
-				for (int i = 0; i < liveCellLocations.size(); i++) {
-					//is cell location alive
-					if (j == liveCellLocations.get(i)) {
-						if (cellNumber < 2 || cellNumber > 3) {
-							//cell to die
-							if (!cellsToDie.contains(j)) {
-								cellsToDie.add(j);
-							}
+				//check if cell is a live
+				if (liveCellLocations.contains(j)) 
+				{
+					//check if cell will die
+					if (cellNumber < 2 || cellNumber > 3) 
+					{
+						//cell to die
+						if (!cellsToDie.contains(j)) 
+						{
+							cellsToDie.add(j);
 						}
-					} else {
-						if (cellNumber == 3)
-							//cell to birth
-							if (!cellsToBirth.contains(j)) {
-								cellsToBirth.add(j);
-							}
+					}
+				} 
+				//else cell is dead
+				else 
+				{
+					//check if cell will birth
+					if (cellNumber == 3)
+					{
+						//cell to birth
+						if (!cellsToBirth.contains(j)) 
+						{
+							cellsToBirth.add(j);
+						}
 					}
 				}
 			}
+		}
 			//change cell locations according to lists
 			updateCells();
-		}
 	}
 }
