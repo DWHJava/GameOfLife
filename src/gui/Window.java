@@ -119,23 +119,25 @@ public class Window extends JFrame implements ActionListener
 		}
 		
 		return totalCellCount;
+			
 	}
 	
 	//Updates cells after iteration
 	public static void updateCells() {
-		//iterate through 
-		for (int i = 0; i < buttons.length; i++) {
-			buttons[i].setBackground(Color.white);
-		}
-		for (int i = 0; i < cellsToDie.size(); i++) {
+		//Kill Cells
+		for (int i = 0; i < cellsToDie.size(); i++) 
+		{
+			//change color
 			buttons[cellsToDie.get(i)].setBackground(Color.WHITE);
-			for (int j = 0; j < liveCellLocations.size(); j++){
-				if (cellsToDie.get(i) == liveCellLocations.get(j))
-					liveCellLocations.remove(j);
-			}
-
+			
+			//Remove new dead cell position
+			if (liveCellLocations.contains(cellsToDie.get(i)))
+				liveCellLocations.remove(liveCellLocations.indexOf(cellsToDie.get(i)));
 		}
-		for (int i = 0; i < cellsToBirth.size(); i++) {
+		
+		//Birth Cells
+		for (int i = 0; i < cellsToBirth.size(); i++) 
+		{
 			buttons[cellsToBirth.get(i)].setBackground(Color.BLUE);
 			liveCellLocations.add(cellsToBirth.get(i));
 		}
