@@ -21,7 +21,6 @@ public class Window extends JFrame implements ActionListener {
 	final static int LIVE_CELLS = SIZE * 4;
 	
 	static List<Integer> liveCellLocations = new ArrayList<Integer>();
-	static List<Integer> alternateList = new ArrayList<Integer>();
 	
 	static List<Integer> cellsToDie = new ArrayList<Integer>();
 	static List<Integer> cellsToBirth = new ArrayList<Integer>();
@@ -188,6 +187,38 @@ public class Window extends JFrame implements ActionListener {
 		updateCells();
 	}
 	
+<<<<<<< HEAD
+	private static void clearBoard() {		
+		liveCellLocations.clear();
+		cellsToBirth.clear();
+		cellsToDie.clear();
+		
+		for (int i = 0; i < SIZE * SIZE; i++) {
+			buttons[i].setBackground(Color.WHITE);
+		}		
+	}
+	
+	private static void testing(int j) {
+		int cellNumber = getLiveCellNumber(j);
+		if (liveCellLocations.contains(j)) {
+			//check if cell will die
+			if (cellNumber < 2 || cellNumber > 3) {
+				//cell to die
+				if (!cellsToDie.contains(j)) {
+					System.out.println("It should be killed");
+				}
+			}
+		} 
+		//else cell is dead
+		else {
+			//check if cell will birth
+			if (cellNumber == 3) {
+				//cell to birth
+				if (!cellsToBirth.contains(j)) {
+					System.out.println("It should be birthed");
+				}
+			}
+=======
 	private static void clearBoard() {
 		System.out.println("Clearing Board");
 		while (liveCellLocations.size() > 0 && cellsToBirth.size() > 0 && cellsToDie.size() > 0) {
@@ -195,6 +226,7 @@ public class Window extends JFrame implements ActionListener {
 				cellsToDie.add(i);
 			}
 			updateCells();
+>>>>>>> 326349e5c4b433d571e3a34b91c6d2931907c309
 		}
 		System.out.println("Cleared Board");
 	}
