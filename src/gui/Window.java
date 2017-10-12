@@ -32,7 +32,9 @@ public class Window extends JFrame implements ActionListener {
 	JPanel optionPanel = new JPanel();
 	JButton next = new JButton("Next");
 	JButton toggle = new JButton("Toggle");
+	JButton autorun = new JButton("Auto Run");
 	JButton clear = new JButton("Clear");
+	JButton reset = new JButton("Reset");
 	JButton changingSize = new JButton("Size Settings");
 	
 	static JButton[] buttons = new JButton[SIZE * SIZE];
@@ -48,10 +50,14 @@ public class Window extends JFrame implements ActionListener {
 		generateButtons();
 		next.addActionListener(this);
 		toggle.addActionListener(this);
+		autorun.addActionListener(this);
 		clear.addActionListener(this);
+		reset.addActionListener(this);
 		optionPanel.add(next);
-		optionPanel.add(toggle);
+//		optionPanel.add(toggle);
+//		optionPanel.add(autorun);
 		optionPanel.add(clear);
+		optionPanel.add(reset);
 		add(game, BorderLayout.CENTER);
 		add(optionPanel, BorderLayout.SOUTH);
 		setVisible(true);
@@ -59,10 +65,8 @@ public class Window extends JFrame implements ActionListener {
 	}
 	
 	//Generate buttons
-	private void generateButtons() 
-	{
-		for (int i = 0; i < buttons.length; i++) 
-		{
+	private void generateButtons() {
+		for (int i = 0; i < buttons.length; i++) {
 			buttons[i] = new JButton();
 			buttons[i].addActionListener(this);
 			game.add(buttons[i]);
@@ -71,14 +75,12 @@ public class Window extends JFrame implements ActionListener {
 	}
 	
 	//Preset live cells
-	private void setLiveCells()
-	{
-		for (int i = 0; i < LIVE_CELLS; i++)
-		{
+	private void setLiveCells() {
+		clearBoard();
+		for (int i = 0; i < LIVE_CELLS; i++) {
 			liveCellLocations.add(getUniqueRand());
 			buttons[liveCellLocations.get(i)].setBackground(Color.BLUE);
 		}
-
 	}
 	
 	//Method to create unique random numbers
@@ -232,6 +234,8 @@ public class Window extends JFrame implements ActionListener {
 		} else if (source.getSource() == toggle) {
 			// TODO Autorun doesn't work fix it
 			tempTest = !tempTest;
+		} else if (source.getSource() == reset) {
+			setLiveCells();
 		} else if (source.getSource() == clear) {
 			clearBoard();
 		} else {
