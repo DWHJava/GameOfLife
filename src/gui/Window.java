@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -17,7 +18,7 @@ public class Window extends JFrame implements ActionListener {
 	
 	final Dimension WINDOW_SIZE = new Dimension(600,600);
 	final static int SIZE = 12;
-	final static int LIVE_CELLS = 48;
+	final static int LIVE_CELLS = SIZE * 4;
 	
 	static List<Integer> liveCellLocations = new ArrayList<Integer>();
 	static List<Integer> alternateList = new ArrayList<Integer>();
@@ -32,6 +33,8 @@ public class Window extends JFrame implements ActionListener {
 	JPanel optionPanel = new JPanel();
 	JButton next = new JButton("Next");
 	JButton toggle = new JButton("Toggle");
+	JButton clear = new JButton("Clear");
+	JButton changingSize = new JButton("Size Settings");
 	
 	static JButton[] buttons = new JButton[SIZE * SIZE];
 	
@@ -41,12 +44,15 @@ public class Window extends JFrame implements ActionListener {
 		setSize(WINDOW_SIZE);
 		setResizable(false);
 		setLayout(new BorderLayout());
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		game.setLayout(new GridLayout(SIZE, SIZE));
 		generateButtons();
 		next.addActionListener(this);
 		toggle.addActionListener(this);
+		clear.addActionListener(this);
 		optionPanel.add(next);
 		optionPanel.add(toggle);
+		optionPanel.add(clear);
 		add(game, BorderLayout.CENTER);
 		add(optionPanel, BorderLayout.SOUTH);
 		setVisible(true);
@@ -182,6 +188,17 @@ public class Window extends JFrame implements ActionListener {
 		updateCells();
 	}
 	
+	private static void clearBoard() {
+		System.out.println("Clearing Board");
+		while (liveCellLocations.size() > 0 && cellsToBirth.size() > 0 && cellsToDie.size() > 0) {
+			for (int i = 0; i < SIZE * SIZE; i++) {
+				cellsToDie.add(i);
+			}
+			updateCells();
+		}
+		System.out.println("Cleared Board");
+	}
+	
 	private static void testing(int j) {
 		int cellNumber = getLiveCellNumber(j);
 		if (liveCellLocations.contains(j)) {
@@ -214,6 +231,8 @@ public class Window extends JFrame implements ActionListener {
 		} else if (source.getSource() == toggle) {
 			// TODO Autorun doesn't work fix it
 			tempTest = !tempTest;
+		} else if (source.getSource() == clear) {
+			clearBoard();
 		} else {
 			for (int i = 0; i < buttons.length; i++) {
 				if (source.getSource() == buttons[i] && liveCellLocations.contains(i)) {
