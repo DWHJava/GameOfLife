@@ -89,7 +89,7 @@ public class Window extends JFrame implements ActionListener
 	}
 
 	// Method to create unique random numbers
-	public static int getUniqueRand()
+	private static int getUniqueRand()
 	{
 		int randomNumber = 1 + (int) (Math.random() * ((SIZE * SIZE) - 1));
 
@@ -103,7 +103,7 @@ public class Window extends JFrame implements ActionListener
 	}
 
 	// Calculates how many live cells around cell
-	public static int getLiveCellNumber(int position)
+	private static int getLiveCellNumber(int position)
 	{
 		int totalCellCount = 0;
 
@@ -139,9 +139,28 @@ public class Window extends JFrame implements ActionListener
 	}
 
 	// Updates cells after iteration
-	public static void updateCells()
+	private static void updateCells()
 	{
-		// Kill cells
+		birthCells();
+		killCells();
+	}
+	
+	// Birth cells
+	private static void birthCells() 
+	{
+		for (int i = 0; i < cellsToBirth.size(); i++)
+		{
+			// change color and add cell position
+			buttons[cellsToBirth.get(i)].setBackground(Color.BLUE);
+			liveCellLocations.add(cellsToBirth.get(i));
+		}
+		
+		cellsToBirth.clear();
+	}
+	
+	// Kill cells
+	private static void killCells() 
+	{
 		for (int i = 0; i < cellsToDie.size(); i++)
 		{
 			// change color
@@ -151,17 +170,7 @@ public class Window extends JFrame implements ActionListener
 			if (liveCellLocations.contains(cellsToDie.get(i)))
 				liveCellLocations.remove(liveCellLocations.indexOf(cellsToDie.get(i)));
 		}
-
-		// Birth Cells
-		for (int i = 0; i < cellsToBirth.size(); i++)
-		{
-			// change color and add cell position
-			buttons[cellsToBirth.get(i)].setBackground(Color.BLUE);
-			liveCellLocations.add(cellsToBirth.get(i));
-		}
-
-		// clear lists
-		cellsToBirth.clear();
+		
 		cellsToDie.clear();
 	}
 
