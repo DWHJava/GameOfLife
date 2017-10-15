@@ -12,6 +12,7 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 public class Window extends JFrame implements ActionListener
 {
@@ -20,6 +21,9 @@ public class Window extends JFrame implements ActionListener
 	final Dimension WINDOW_SIZE = new Dimension(600, 600);
 	final static int SIZE = 12;
 	final static int LIVE_CELLS = SIZE * 4;
+
+	final static long waitTime = 250;
+	static Boolean isRunning = false;
 
 	static List<Integer> liveCellLocations = new ArrayList<Integer>();
 
@@ -32,6 +36,7 @@ public class Window extends JFrame implements ActionListener
 	JPanel optionPanel = new JPanel();
 
 	JButton next = new JButton("Next");
+	JButton autoRun = new JButton("Auto Run");
 	JButton clear = new JButton("Clear");
 	JButton reset = new JButton("Reset");
 
@@ -50,10 +55,12 @@ public class Window extends JFrame implements ActionListener
 		generateButtons();
 
 		next.addActionListener(this);
+		autoRun.addActionListener(this);
 		clear.addActionListener(this);
 		reset.addActionListener(this);
 
 		optionPanel.add(next);
+		optionPanel.add(autoRun);
 		optionPanel.add(clear);
 		optionPanel.add(reset);
 
@@ -144,9 +151,9 @@ public class Window extends JFrame implements ActionListener
 		birthCells();
 		killCells();
 	}
-	
+
 	// Birth cells
-	private static void birthCells() 
+	private static void birthCells()
 	{
 		for (int i = 0; i < cellsToBirth.size(); i++)
 		{
@@ -154,12 +161,12 @@ public class Window extends JFrame implements ActionListener
 			buttons[cellsToBirth.get(i)].setBackground(Color.BLUE);
 			liveCellLocations.add(cellsToBirth.get(i));
 		}
-		
+
 		cellsToBirth.clear();
 	}
-	
+
 	// Kill cells
-	private static void killCells() 
+	private static void killCells()
 	{
 		for (int i = 0; i < cellsToDie.size(); i++)
 		{
@@ -170,12 +177,12 @@ public class Window extends JFrame implements ActionListener
 			if (liveCellLocations.contains(cellsToDie.get(i)))
 				liveCellLocations.remove(liveCellLocations.indexOf(cellsToDie.get(i)));
 		}
-		
+
 		cellsToDie.clear();
 	}
 
 	// Completes a life iteration
-	private static void doLifeIteration()
+	private void doLifeIteration()
 	{
 		// Check every cell
 		for (int j = 0; j < (SIZE * SIZE); j++)
@@ -211,6 +218,10 @@ public class Window extends JFrame implements ActionListener
 			}
 		}
 
+		// stop autoRun if there are no changes
+		if (cellsToBirth.isEmpty() && cellsToDie.isEmpty())
+			setIsRunning(false);
+
 		// update visuals
 		updateCells();
 	}
@@ -228,13 +239,66 @@ public class Window extends JFrame implements ActionListener
 		}
 	}
 
+	// Auto run for waitTime
+	private void autoRun()
+	{
+		SwingUtilities.invokeLater(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+
+				doLifeIteration();
+				try
+				{
+					Thread.sleep(waitTime);
+				} catch (InterruptedException e)
+				{
+					e.printStackTrace();
+				}
+
+				if (isRunning)
+					autoRun();
+			}
+
+		});
+
+	}
+
+	private void setIsRunning(boolean running)
+	{
+		if (!running)
+		{
+			isRunning = false;
+			autoRun.setText("Auto Run");
+
+		} else
+		{
+			isRunning = true;
+			autoRun.setText("Stop");
+
+			autoRun();
+		}
+
+		next.setEnabled(!isRunning);
+		reset.setEnabled(!isRunning);
+		clear.setEnabled(!isRunning);
+
+	}
+
 	@Override
 	public void actionPerformed(ActionEvent source)
 	{
+		if (isRunning && source.getSource() != autoRun)
+			return;
 		// Check what button is being pressed
 		if (source.getSource() == next)
 		{
 			doLifeIteration();
+		} else if (source.getSource() == autoRun)
+		{
+			setIsRunning(!isRunning);
+
 		} else if (source.getSource() == reset)
 		{
 			setLiveCells();
