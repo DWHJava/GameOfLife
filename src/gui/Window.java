@@ -11,39 +11,52 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-public class Window extends JFrame implements ActionListener
-{
+public class Window extends JFrame implements ActionListener {
+	// Auto generated serial ID
 	private static final long serialVersionUID = 7446192599263749847L;
-
+	
+	// Window size variables
 	final Dimension WINDOW_SIZE = new Dimension(600, 600);
 	final static int SIZE = 12;
 	final static int LIVE_CELLS = SIZE * 4;
-
+	
+	// Autorun variables
 	final static long waitTime = 250;
 	static Boolean isRunning = false;
-
+	
+	// List of all the live cells
 	static List<Integer> liveCellLocations = new ArrayList<Integer>();
-
+	
+	// Lists that hold the cell locations needing to die or be birthed
 	static List<Integer> cellsToDie = new ArrayList<Integer>();
 	static List<Integer> cellsToBirth = new ArrayList<Integer>();
-
-	boolean tempTest = false;
-
+		
+	// Sets up panels
 	JPanel game = new JPanel();
+	JPanel scorePanel = new JPanel();
 	JPanel optionPanel = new JPanel();
-
+	
+	// Set up score panel stuff
+	JLabel scoreLabel = new JLabel("0");
+	
+	// Sets up UI buttons
 	JButton next = new JButton("Next");
 	JButton autoRun = new JButton("Auto Run");
 	JButton clear = new JButton("Clear");
 	JButton reset = new JButton("Reset");
-
-	static JButton[] buttons = new JButton[SIZE * SIZE];
-
-	public Window()
-	{
+	
+	// Sets up cell buttons
+	JButton[] buttons = new JButton[SIZE * SIZE];
+	
+	// Iteration count
+	int iterations = 0;
+	
+	// Sets up the window layout
+	public Window() {
 		super("Game of Life");
 
 		setSize(WINDOW_SIZE);
@@ -58,25 +71,27 @@ public class Window extends JFrame implements ActionListener
 		autoRun.addActionListener(this);
 		clear.addActionListener(this);
 		reset.addActionListener(this);
+		
+		scorePanel.add(scoreLabel);
 
 		optionPanel.add(next);
 		optionPanel.add(autoRun);
 		optionPanel.add(clear);
 		optionPanel.add(reset);
-
+		
+		add(scorePanel, BorderLayout.NORTH);
 		add(game, BorderLayout.CENTER);
 		add(optionPanel, BorderLayout.SOUTH);
 
 		setVisible(true);
 
 		setLiveCells();
+		updateScore();
 	}
 
 	// Generate buttons
-	private void generateButtons()
-	{
-		for (int i = 0; i < buttons.length; i++)
-		{
+	private void generateButtons() {
+		for (int i = 0; i < buttons.length; i++) {
 			buttons[i] = new JButton();
 			buttons[i].addActionListener(this);
 			game.add(buttons[i]);
@@ -85,23 +100,19 @@ public class Window extends JFrame implements ActionListener
 	}
 
 	// Preset live cells
-	private void setLiveCells()
-	{
+	private void setLiveCells() {
 		clearBoard();
-		for (int i = 0; i < LIVE_CELLS; i++)
-		{
+		for (int i = 0; i < LIVE_CELLS; i++) {
 			liveCellLocations.add(getUniqueRand());
 			buttons[liveCellLocations.get(i)].setBackground(Color.BLUE);
 		}
 	}
 
 	// Method to create unique random numbers
-	private static int getUniqueRand()
-	{
+	private int getUniqueRand() {
 		int randomNumber = 1 + (int) (Math.random() * ((SIZE * SIZE) - 1));
 
-		for (int i = 0; i < liveCellLocations.size(); i++)
-		{
+		for (int i = 0; i < liveCellLocations.size(); i++) {
 			if (liveCellLocations.get(i) == randomNumber)
 				return getUniqueRand();
 		}
@@ -109,16 +120,18 @@ public class Window extends JFrame implements ActionListener
 		return randomNumber;
 	}
 
-	// Calculates how many live cells around cell
-	private static int getLiveCellNumber(int position)
-	{
+	/**
+	 * Calculates how many live cells around cell
+	 * @param position The cell thats surroundings are checked
+	 * @return The amount of live cells around a cell
+	 */
+	private int getLiveCellNumber(int position) {
 		int totalCellCount = 0;
 
 		int row = position % SIZE;
 		int column = position / SIZE;
 
-		for (int i = 0; i < liveCellLocations.size(); i++)
-		{
+		for (int i = 0; i < liveCellLocations.size(); i++) {
 			int cellPosition = liveCellLocations.get(i);
 			int cellRow = cellPosition % SIZE;
 			int cellColumn = cellPosition / SIZE;
@@ -145,16 +158,8 @@ public class Window extends JFrame implements ActionListener
 
 	}
 
-	// Updates cells after iteration
-	private static void updateCells()
-	{
-		birthCells();
-		killCells();
-	}
-
 	// Birth cells
-	private static void birthCells()
-	{
+	private void birthCells() {
 		for (int i = 0; i < cellsToBirth.size(); i++)
 		{
 			// change color and add cell position
@@ -166,10 +171,8 @@ public class Window extends JFrame implements ActionListener
 	}
 
 	// Kill cells
-	private static void killCells()
-	{
-		for (int i = 0; i < cellsToDie.size(); i++)
-		{
+	private void killCells() {
+		for (int i = 0; i < cellsToDie.size(); i++) {
 			// change color
 			buttons[cellsToDie.get(i)].setBackground(Color.WHITE);
 
@@ -182,36 +185,28 @@ public class Window extends JFrame implements ActionListener
 	}
 
 	// Completes a life iteration
-	private void doLifeIteration()
-	{
+	private void doLifeIteration() {
 		// Check every cell
-		for (int j = 0; j < (SIZE * SIZE); j++)
-		{
+		for (int j = 0; j < (SIZE * SIZE); j++) {
 			int cellNumber = getLiveCellNumber(j);
 
 			// check if cell is a live
-			if (liveCellLocations.contains(j))
-			{
+			if (liveCellLocations.contains(j)) {
 				// check if cell will die
-				if (cellNumber < 2 || cellNumber > 3)
-				{
+				if (cellNumber < 2 || cellNumber > 3) {
 					// cell to die
-					if (!cellsToDie.contains(j))
-					{
+					if (!cellsToDie.contains(j)) {
 						cellsToDie.add(j);
 					}
 				}
 			}
 
 			// else cell is dead
-			else
-			{
+			else {
 				// check if cell will birth
-				if (cellNumber == 3)
-				{
+				if (cellNumber == 3) {
 					// cell to birth
-					if (!cellsToBirth.contains(j))
-					{
+					if (!cellsToBirth.contains(j)) {
 						cellsToBirth.add(j);
 					}
 				}
@@ -221,59 +216,70 @@ public class Window extends JFrame implements ActionListener
 		// stop autoRun if there are no changes
 		if (cellsToBirth.isEmpty() && cellsToDie.isEmpty())
 			setIsRunning(false);
-
+		
+		// updates the iteration amount
+		iterations++;
+		
 		// update visuals
 		updateCells();
+		updateScore();
 	}
 
 	// Clears the board
-	private static void clearBoard()
-	{
+	private void clearBoard() {
 		liveCellLocations.clear();
 		cellsToBirth.clear();
 		cellsToDie.clear();
 
-		for (int i = 0; i < SIZE * SIZE; i++)
-		{
+		for (int i = 0; i < SIZE * SIZE; i++) {
 			buttons[i].setBackground(Color.WHITE);
 		}
+		iterations = 0;
 	}
-
-	// Auto run for waitTime
-	private void autoRun()
-	{
-		SwingUtilities.invokeLater(new Runnable()
-		{
+	
+	// Updates cells after iteration
+	private void updateCells() {
+		birthCells();
+		killCells();
+	}
+	
+	// Updates the score of the game
+	private void updateScore() {
+		scoreLabel.setText("Iterations: " + iterations + " Live Cells: " + Integer.toString(liveCellLocations.size()));
+	}
+	
+	/**
+	 * Auto runs through the life iterations until finished
+	 * Sleeps for wait time
+	 * Will not work with while loop @brosius01
+	 */
+	private void autoRun() {
+		SwingUtilities.invokeLater(new Runnable() {
 			@Override
-			public void run()
-			{
-
+			public void run() {
 				doLifeIteration();
-				try
-				{
+				try {
 					Thread.sleep(waitTime);
-				} catch (InterruptedException e)
-				{
+				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 
 				if (isRunning)
 					autoRun();
 			}
-
 		});
-
 	}
-
-	private void setIsRunning(boolean running)
-	{
-		if (!running)
-		{
+	
+	/**
+	 * Toggles whether or not the program should be running automatically or not
+	 * @param running a true or false variable stating whether or not the program is running
+	 */
+	private void setIsRunning(boolean running) {
+		if (!running) {
 			isRunning = false;
 			autoRun.setText("Auto Run");
 
-		} else
-		{
+		} else {
 			isRunning = true;
 			autoRun.setText("Stop");
 
@@ -283,44 +289,33 @@ public class Window extends JFrame implements ActionListener
 		next.setEnabled(!isRunning);
 		reset.setEnabled(!isRunning);
 		clear.setEnabled(!isRunning);
-
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent source)
-	{
+	public void actionPerformed(ActionEvent source) {
 		if (isRunning && source.getSource() != autoRun)
 			return;
 		// Check what button is being pressed
-		if (source.getSource() == next)
-		{
+		if (source.getSource() == next) {
 			doLifeIteration();
-		} else if (source.getSource() == autoRun)
-		{
+		} else if (source.getSource() == autoRun) {
 			setIsRunning(!isRunning);
-
-		} else if (source.getSource() == reset)
-		{
+		} else if (source.getSource() == reset) {
 			setLiveCells();
-		} else if (source.getSource() == clear)
-		{
+		} else if (source.getSource() == clear) {
 			clearBoard();
-		} else
-		{
-			for (int i = 0; i < buttons.length; i++)
-			{
-				if (source.getSource() == buttons[i] && liveCellLocations.contains(i))
-				{
+		} else {
+			// Kills and Births cells where you click if its a cell you click
+			for (int i = 0; i < buttons.length; i++) {
+				if (source.getSource() == buttons[i] && liveCellLocations.contains(i)) {
 					cellsToDie.add(i);
 					updateCells();
-				} else if (source.getSource() == buttons[i])
-				{
+				} else if (source.getSource() == buttons[i]) {
 					cellsToBirth.add(i);
 					updateCells();
 				}
 			}
-
 		}
+		updateScore();
 	}
-
 }
