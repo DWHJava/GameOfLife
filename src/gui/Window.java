@@ -63,6 +63,7 @@ public class Window extends JFrame implements ActionListener {
 		setResizable(false);
 		setLayout(new BorderLayout());
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setLocationRelativeTo(null);
 		game.setLayout(new GridLayout(SIZE, SIZE));
 
 		generateButtons();
