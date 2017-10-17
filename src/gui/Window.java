@@ -234,6 +234,7 @@ public class Window extends JFrame implements ActionListener {
 		for (int i = 0; i < SIZE * SIZE; i++) {
 			buttons[i].setBackground(Color.WHITE);
 		}
+		iterations = 0;
 	}
 	
 	// Updates cells after iteration
