@@ -1,6 +1,5 @@
 # GameOfLife
 <h2>This project was based on <a href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life">Conway's Game of Life</a></h2>
-<br>
 <h2>What is this Project</h2>
 <p>This project was done for a java class that we took. We were tasked to make application making use of available graphics and to make it look nice. We decided to base our project off of a previously done project called Conway's Game of Life. This "game" is more of a simulation to roughly simulate life.</p>
 <hr>
@@ -12,6 +11,12 @@
 <li>Any live cell with more than three live neighbours dies, as if by overpopulation.</li>
 <li>Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.</li>
 </ol>
+<hr>
+<h2>Releases</h2>
+<ul>
+<li><a href="https://github.com/DWHJava/GameOfLife/releases">All Releases</a></li>
+<li><a href="https://github.com/DWHJava/GameOfLife/releases/tag/v1.0">Version 1.0</a></li>
+</ul>
 <hr>
 <h3>Videos Showing Examples of this Project</h3>
 <ul>
