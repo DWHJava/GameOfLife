@@ -15,6 +15,7 @@
 <h2>Releases</h2>
 <ul>
 <li><a href="https://github.com/DWHJava/GameOfLife/releases">All Releases</a></li>
+<li><a href="https://github.com/DWHJava/GameOfLife/releases/tag/v1.1">Version 1.1</a></li>
 <li><a href="https://github.com/DWHJava/GameOfLife/releases/tag/v1.0">Version 1.0</a></li>
 </ul>
 <hr>
