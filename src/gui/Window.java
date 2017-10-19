@@ -21,7 +21,7 @@ public class Window extends JFrame implements ActionListener {
 	
 	// Window size variables
 	final Dimension WINDOW_SIZE = new Dimension(600, 600);
-	final static int SIZE = 3;
+	final static int SIZE = 36;
 	final static int LIVE_CELLS = (SIZE * SIZE) / 3;
 	
 	// Autorun variables
