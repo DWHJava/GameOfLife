@@ -21,8 +21,8 @@ public class Window extends JFrame implements ActionListener {
 	
 	// Window size variables
 	final Dimension WINDOW_SIZE = new Dimension(600, 600);
-	final static int SIZE = 12;
-	final static int LIVE_CELLS = SIZE * 4;
+	final static int SIZE = 3;
+	final static int LIVE_CELLS = (SIZE * SIZE) / 3;
 	
 	// Autorun variables
 	final static long waitTime = 250;
@@ -111,7 +111,7 @@ public class Window extends JFrame implements ActionListener {
 
 	// Method to create unique random numbers
 	private int getUniqueRand() {
-		int randomNumber = 1 + (int) (Math.random() * ((SIZE * SIZE) - 1));
+		int randomNumber = 0 + (int) (Math.random() * ((SIZE * SIZE) - 1));
 
 		for (int i = 0; i < liveCellLocations.size(); i++) {
 			if (liveCellLocations.get(i) == randomNumber)
